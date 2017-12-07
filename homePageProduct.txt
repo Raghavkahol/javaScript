@@ -1,0 +1,8 @@
+<html>
+<head><title>Homepage</title></head>
+<body> 
+	<h1>Buy Products</h1> 
+	<div id="list"></div>
+	<button id="btn">CheckOut</button>
+</body>
+</htm>
