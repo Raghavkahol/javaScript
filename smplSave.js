@@ -5,43 +5,53 @@ var div=document.getElementById("divAddProduct");
 var divListProducts = document.getElementById("divListProducts");
 var aAddProduct = document.getElementById("aAddProduct");
 productArray=local();
-addArry();
+addArry(); 
+
+//print the enteries that are taken from browser history
 for(var i=0;i<productArray.length;i++)
-  console.log(productArray[i].id);
+  console.log(productArray[i].id); 
+
+//call a function for creating new product on click 
 aAddProduct.addEventListener("click",function(event){
 		createNewProduct();
 });
 
-
+//load data from browser history
 function local()
 {
 if (!localStorage.products)
 {
-// default to empty array
+//default to empty array
 localStorage.products = JSON.stringify([]);
 }
 return JSON.parse(localStorage.products);
 }
  
+//store in browser history
 function store(products)
 {
 localStorage.products = JSON.stringify(products);
 }
 
+//generate "break"
 function break1(target){
 	var br=document.createElement("br");
 	target.appendChild(br);
-}
+} 
+
+//hide the input form
 function hideButton(){
 	aAddProduct.setAttribute("style","visibility:hidden");
 }
 
+//return index of particular dom entery from array
 function getArrayIndex(id){
     for(var i=0;i<productArray.length;i++)
 		if(productArray[i].id==id)
 			return i;
 }
 
+//delete particular entry from array having passed "id"
 function removeFromArray(id){
   		productArray.splice(id,1);
 		localStorage.products = JSON.stringify([]);
@@ -49,6 +59,7 @@ function removeFromArray(id){
 		console.log(productArray);
 }
 
+//store and show added product in dom
 function addToDOM(objProduct){
     var div1=document.createElement("div");
      div1.setAttribute("id",objProduct.id);
@@ -87,8 +98,8 @@ function addToDOM(objProduct){
 	dlt.addEventListener("click",function(event){
 		var target=event.target.parentNode;
 		var index=getArrayIndex(parseInt(target.id));
-       		removeFromArray(index);
-		target.parentNode.removeChild(target);
+       		removeFromArray(index);  //remove from array
+		target.parentNode.removeChild(target);  //remove from dom
         
         });
 
@@ -100,7 +111,7 @@ function addToDOM(objProduct){
 	
 		var index=getArrayIndex(parseInt(target.id));
 		
-		putValuesInDom(index);
+		putValuesInDom(index); //
 		localStorage.products = JSON.stringify([]);
 store(productArray);
 		});
@@ -110,6 +121,8 @@ store(productArray);
      unhideButton();
 }
 
+
+//generate a form to edit values of array on passed idex
 function putValuesInDom(index){
   var Name=document.createElement("label");
 		Name.innerHTML="NAME:";
@@ -170,23 +183,23 @@ function putValuesInDom(index){
 		var save=document.createElement("Button");
 	save.innerHTML="Save these Changes";
 	div.appendChild(save);
-        break1(div);
+        break1(div); 
+		 
+		 //save the changed values to product array
 	save.addEventListener("click",function(event){
-	//productArray[index].id=productId;
 	productArray[index].name=document.getElementById("name1").value;
         productArray[index].desc=document.getElementById("desc1").value;
 	productArray[index].price=document.getElementById("price1").value;
 	productArray[index].quantity=document.getElementById("quantity1").value;
-store(productArray);
-		deleteList();
-        addArry();
+	store(productArray); //save edited product array in local storage of browser
+		deleteList(); //delete all enteries from dom
+        addArry(); //store edited values to dom
 
-deletePanel();
+		deletePanel(); //delete form in which u edited values
 		});
-	
-
 }
 
+//add and show edited product array in dom
 function addArry(){
  for(var i=0;i<productArray.length;i++){
 		var object=new Object();
@@ -195,22 +208,29 @@ function addArry(){
 		object.desc=productArray[i].desc;
 		object.price=productArray[i].price;
 		object.quantity=productArray[i].quantity;
-productId=object.id;
+		productId=object.id;
 		addToDOM(object);
 }
 productId++;
   
 }
 
+
+//unhide "Add a new product" button
 function unhideButton(){
    	aAddProduct.setAttribute("style","visibility:visible");
 }
+
+
+//delete all product enteries from dom
 function deleteList(){
   child=divListProducts.childNodes;
 	for(var i=0;child.length>0;)
             divListProducts.removeChild(child[i]);
 }
 
+
+//store input values from form in an array 
 function addToArray(){
 	var objProduct=new Object();
 	objProduct.id=productArray.length+1;
@@ -218,23 +238,26 @@ function addToArray(){
 	objProduct.desc=document.getElementById("desc1").value;
 	objProduct.price=document.getElementById("price1").value;
 	objProduct.quantity=document.getElementById("quantity1").value;
-	productArray.push(objProduct);
-localStorage.products = JSON.stringify([]);
-	store(productArray);
-	addToDOM(objProduct);
+	productArray.push(objProduct); //push values stored in object in array
+localStorage.products = JSON.stringify([]);   //clear browser's local storage
+	store(productArray);  //save array in browser local storage
+	addToDOM(objProduct);  //store in dom
 
-	deletePanel();
+	deletePanel(); //function to clear form 
         productId++;		
 }
+
+//delete the form (thats for taking input)
 function deletePanel(){
        var child=div.childNodes;
     for(var i=0;child.length>0;){
              div.removeChild(child[i]);
 }
-}
+}			
+
+	//generate and display a form for taking inputs			
 function createNewProduct(){
                hideButton();
-		//create a name label
        		var head=document.createElement("label");
                 head.innerHTML="ADD NEW PRODUCT ";
 		div.appendChild(head);
@@ -303,6 +326,6 @@ function createNewProduct(){
 		div.appendChild(button);
 		break1(div);
 		button.addEventListener("click",function(event){
-				addToArray();
+				addToArray(); //store values to an array
 });		
 }
