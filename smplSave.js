@@ -56,7 +56,6 @@ function removeFromArray(id){
   		productArray.splice(id,1);
 		localStorage.products = JSON.stringify([]);
 		store(productArray);
-		console.log(productArray);
 }
 
 //store and show added product in dom
@@ -113,7 +112,7 @@ function addToDOM(objProduct){
 		
 		putValuesInDom(index); //
 		localStorage.products = JSON.stringify([]);
-store(productArray);
+		store(productArray);
 		});
 	 divListProducts.appendChild(div1);
 	break1(div1);
@@ -239,7 +238,7 @@ function addToArray(){
 	objProduct.price=document.getElementById("price1").value;
 	objProduct.quantity=document.getElementById("quantity1").value;
 	productArray.push(objProduct); //push values stored in object in array
-localStorage.products = JSON.stringify([]);   //clear browser's local storage
+	localStorage.products = JSON.stringify([]);   //clear browser's local storage
 	store(productArray);  //save array in browser local storage
 	addToDOM(objProduct);  //store in dom
 

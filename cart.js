@@ -5,15 +5,15 @@ var cartArray=[];
 var productArray=[] ;
 productArray=local(); //store local storage's data in array
 addArry();        //add array's value to dom
-console.log(productArray.length);
+
 //load data from browser history
 function local()
 {
-/*if (!localStorage.products)
+if (!localStorage.products)
 {
 //default to empty array
 localStorage.products = JSON.stringify([]);
-}*/
+}
 return JSON.parse(localStorage.products);
 } 
 
