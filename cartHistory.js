@@ -1,4 +1,5 @@
 var div1=document.getElementById("list");
+var div3=document.getElementById("limit"); 
 var cartList=[];
 cartList=local(); 
 total=0;
@@ -9,7 +10,47 @@ function break1(target){
 	var br=document.createElement("br");
 	target.appendChild(br);
 } 
+//
+//
+var user=[];
+var user=local1();
+//
 
+var valid=0;
+
+if(user.length>0){
+	valid=1;
+	//log out button
+ var butn11=document.createElement("button");
+	butn11.setAttribute("id","logout");
+	butn11.setAttribute("style","float:right");
+	butn11.innerHTML="Logout";
+	div3.appendChild(butn11); 
+	//logout funtionality
+	document.getElementById("logout").addEventListener("click",function(){
+		sessionStorage.currentuser = JSON.stringify([]);
+		window.location.assign("login.html");
+	});
+
+ var name11=document.createElement("label");
+	name11.setAttribute("id","nm");
+	name11.setAttribute("style","float:right");
+	name11.innerHTML="Hi ,"+user[0].name;
+	div3.appendChild(name11); 
+}
+// 
+
+//will check wether user is signed in or not
+function local1()
+{
+	if (!sessionStorage.currentuser)
+	{
+		//default to empty array
+		sessionStorage.currentuser = JSON.stringify([]);
+	}
+	return JSON.parse(sessionStorage.currentuser);
+} 
+//
 //store in browser history
 function store(products)
 {
@@ -102,6 +143,10 @@ function addToDOM(object){
 		dv.appendChild(btn1);
 	 btn1.addEventListener("click",function(){
 		 finalList.push(object);
+		 	var target=event.target.parentNode;
+			var index=getArrayIndex(object.id);
+			removeFromArray(index);
+			target.parentNode.removeChild(target);
 	 });
 	 
 	 var btn2=document.createElement("button");

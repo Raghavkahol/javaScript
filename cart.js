@@ -1,10 +1,76 @@
 var div1=document.getElementById("list"); 
 var div2=document.getElementById("bton"); 
+var div3=document.getElementById("limit"); 
 var productId=1; 
 var cartArray=[];
-var productArray=[] ;
+var productArray=[];
 productArray=local(); //store local storage's data in array
 addArry();        //add array's value to dom
+
+cartArray=localCart();
+//
+var user=[];
+var user=local1();
+
+var valid=0;
+if(user.length>0){
+	valid=1;
+	//log out button
+ var butn11=document.createElement("button");
+	butn11.setAttribute("id","logout");
+	butn11.setAttribute("style","float:right");
+	butn11.innerHTML="Logout";
+	div3.appendChild(butn11); 
+	//logout funtionality
+	document.getElementById("logout").addEventListener("click",function(){
+		sessionStorage.currentuser = JSON.stringify([]);
+		window.location.assign("login.html");
+	});
+
+ var name11=document.createElement("label");
+	name11.setAttribute("id","nm");
+	name11.setAttribute("style","float:right");
+	name11.innerHTML="Hi ,"+user[0].name;
+	div3.appendChild(name11); 
+}
+// 
+var guest=[];
+guest=localGuest();
+
+if(guest.length>0){
+	var obje=new Object();
+		obje.id=guest[0].id;
+		
+		obje.email=user[0].emailVal;
+	//	console.log(obje.email);
+		obje.name=guest[0].name;
+		//obj.desc=productArray[index].desc;
+		
+		obje.price=guest[0].price;
+	cartArray.push(obje);
+}
+
+//will check wether user is signed in or not
+function localGuest()
+{
+	if (!sessionStorage.guestData)
+	{
+		//default to empty array
+		sessionStorage.guestData = JSON.stringify([]);
+	}
+	return JSON.parse(sessionStorage.guestData);
+} 
+
+//will check wether user is signed in or not
+function local1()
+{
+	if (!sessionStorage.currentuser)
+	{
+		//default to empty array
+		sessionStorage.currentuser = JSON.stringify([]);
+	}
+	return JSON.parse(sessionStorage.currentuser);
+} 
 
 //load data from browser history
 function local()
@@ -15,6 +81,18 @@ if (!localStorage.products)
 localStorage.products = JSON.stringify([]);
 }
 return JSON.parse(localStorage.products);
+} 
+
+//load cart data from browser
+//load data from browser history
+function localCart()
+{
+if (!localStorage.cart)
+{
+//default to empty array
+localStorage.cart = JSON.stringify([]);
+}
+return JSON.parse(localStorage.cart);
 } 
 
 //generate "break"
@@ -61,6 +139,11 @@ function getArrayIndex(index){
 		if(productArray[i].id==index)
 				return i;
 	}
+}
+
+
+function store3(ar){
+	sessionStorage.guestData=JSON.stringify(ar);
 }
 //store and show added product in dom
 function addToDOM(objProduct){
@@ -111,12 +194,13 @@ function addToDOM(objProduct){
 
    break1(dv);
 
-    var butn=document.createElement("button");
-	butn.setAttribute("id","btn");
-	butn.innerHTML="Add to cart";
-	dv.appendChild(butn); 
+    var butn1=document.createElement("button");
+	butn1.setAttribute("id","btn");
+	butn1.innerHTML="Add to cart";
+	dv.appendChild(butn1); 
 	
-	butn.addEventListener("click",function(event){
+	butn1.addEventListener("click",function(event){
+	if(valid==1){
 		var target=event.target.parentNode; 
 		var index=getArrayIndex(parseInt(target.id)); 
 	
@@ -126,19 +210,38 @@ function addToDOM(objProduct){
 		else{
 		productArray[index].quantity=productArray[index].quantity-1;
 		}
-			var obj=new Object();
-		obj.id=productArray[index].id;
-		obj.name=productArray[index].name;
-		obj.desc=productArray[index].desc;
-		obj.price=productArray[index].price;
-		obj.quantity=productArray[index].quantity;
-		cartArray.push(obj);
+			var obje=new Object();
+		obje.id=productArray[index].id;
+		
+		obje.email=user[0].emailVal;
+		console.log(obje.email);
+		obje.name=productArray[index].name;
+		//obj.desc=productArray[index].desc;
+		
+		obje.price=productArray[index].price;
+		//obj.quantity=productArray[index].quantity;
+		cartArray.push(obje);
 		
 		//localStorage.products = JSON.stringify([]);
 		store(productArray); 
 		deleteList(); //delete all enteries from dom
         addArry(); //store edited values to dom
-		
+	}else{
+			var ar=[];
+			var obj=new Object();
+			var target=event.target.parentNode; 
+		var index=getArrayIndex(parseInt(target.id)); 
+	
+		obj.id=productArray[index].id;
+		obj.name=productArray[index].name;
+		obj.desc=productArray[index].desc;
+		obj.price=productArray[index].price;
+		obj.quantity=productArray[index].quantity;
+		ar.push(obj);
+		store3(ar);
+			alert("You Need to login first");
+			document.location.assign("login.html");
+	}
 	});
 	
 	break1(dv);
