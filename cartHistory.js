@@ -1,27 +1,50 @@
 var div1=document.getElementById("list");
 var div3=document.getElementById("limit"); 
+
 var cartList=[];
 cartList=local(); 
 total=0;
+var user=[];
+user=local1();
 addArry(total);
 finalList=[]
+
+var details=[];
+details=localDetail();
+
+function localDetail()
+{
+	
+	if (!localStorage.detail)
+	{
+		//default to empty array
+		localStorage.detail = JSON.stringify([]);
+	}
+	return JSON.parse(localStorage.detail);
+}
+//header of bought database is stored here
+var header=[];
+header=localHeader();
+
+function localHeader(){
+	
+	if (!localStorage.head)
+	{
+		//default to empty array
+		localStorage.head = JSON.stringify([]);
+	}
+	return JSON.parse(localStorage.head);
+}
+
 //generate "break"
 function break1(target){
 	var br=document.createElement("br");
 	target.appendChild(br);
 } 
-//
-//
-var user=[];
-var user=local1();
-//
-
-var valid=0;
 
 if(user.length>0){
-	valid=1;
-	//log out button
- var butn11=document.createElement("button");
+    //log out button
+	var butn11=document.createElement("button");
 	butn11.setAttribute("id","logout");
 	butn11.setAttribute("style","float:right");
 	butn11.innerHTML="Logout";
@@ -31,12 +54,12 @@ if(user.length>0){
 		sessionStorage.currentuser = JSON.stringify([]);
 		window.location.assign("login.html");
 	});
-
- var name11=document.createElement("label");
+	var name11=document.createElement("label");
 	name11.setAttribute("id","nm");
 	name11.setAttribute("style","float:right");
 	name11.innerHTML="Hi ,"+user[0].name;
 	div3.appendChild(name11); 
+	
 }
 // 
 
@@ -57,29 +80,38 @@ function store(products)
 		localStorage.cart = JSON.stringify(products);
 }
 
+//store details data
+//store in browser history
+function storeDetails(details)
+{
+		localStorage.detail = JSON.stringify(details);
+}
+
+
 function local()
 {
-if (!localStorage.products)
+if (!localStorage.cart)
 {
 //default to empty array
-localStorage.products = JSON.stringify([]);
+localStorage.cart = JSON.stringify([]);
 }
 return JSON.parse(localStorage.cart);
 } 
 
 //add array's data to dom
 function addArry(total){
- for(var i=0;i<cartList.length;i++){
+	for(var i=0;i<cartList.length;i++){
+		if(cartList[i].email==user[0].emailVal){
 		var object=new Object();
 		object.id=cartList[i].id;
 		object.name=cartList[i].name;
-		object.desc=cartList[i].desc;
+		//object.desc=cartList[i].desc;
 		object.price=cartList[i].price;
 		total=total+parseInt(object.price);
 		object.quantity=cartList[i].quantity;
 		productId=object.id;
 		addToDOM(object);
-}
+ }}
 }
 
 //return the index of valid entry
@@ -115,15 +147,6 @@ function addToDOM(object){
      name.innerHTML=object.name;
      dv.appendChild(name);
 
-    break1(dv);
-     	var Desc=document.createElement("label");
-		Desc.innerHTML="Description: ";
-		dv.appendChild(Desc);
-		
-     var name1=document.createElement("label");
-	  name1.setAttribute("id","dsc");
-     name1.innerHTML=object.desc;
-     dv.appendChild(name1);
 
      break1(dv);
 
@@ -139,9 +162,57 @@ function addToDOM(object){
      break1(dv);
 
 	var btn1=document.createElement("button");
-		btn1.innerHTML="ADD";
+		btn1.innerHTML="BUY";
 		dv.appendChild(btn1);
 	 btn1.addEventListener("click",function(){
+		 var ob=new Object();
+		 ob.id=header.length+1;
+		 ob.email=user[0].emailVal;
+		 var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+
+		if(dd<10) {
+			dd = '0'+dd
+		} 
+
+		if(mm<10) {
+			mm = '0'+mm
+		} 
+
+	today = mm + '/' + dd + '/' + yyyy;
+		 ob.date=today;
+		 
+		 var len=header.length;
+		 var bool=0;
+		 for(var j=0;j<len;j++){
+			if(header[j].email==ob.email&&header[j].date==ob.date){
+				bool=1;
+				ob.id=header[j].id;
+				var l=details.length;
+				var objct=new Object();
+				objct.id=l+1;
+				objct.name=object.name;
+				objct.Uid=ob.id;
+				objct.price=object.price;
+				details.push(objct);
+				storeDetails(details);
+			}
+		 }
+		if(bool==0){
+				var l=details.length;
+				var objct=new Object();
+				objct.id=l+1;
+				objct.name=object.name;
+				objct.Uid=ob.id;
+				objct.price=object.price;
+				details.push(objct);
+				storeDetails(details);
+				 header.push(ob);
+		        storeHead(header);
+		}
+		
 		 finalList.push(object);
 		 	var target=event.target.parentNode;
 			var index=getArrayIndex(object.id);
@@ -164,10 +235,18 @@ function addToDOM(object){
  
 	
 }
+
+//store bought products in local storage "header"
+function storeHead(header){
+	localStorage.head=JSON.stringify(header);
+}
+//store bought products in local storage "finallist"
 function store1(finalList){
 	localStorage.finallist=JSON.stringify(finalList);
 }
 break1(div1);
+
+//checkout anchor
 var anchr=document.createElement("a");
 anchr.setAttribute("href","showFinalList.html");
 anchr.innerHTML="CHECKOUT";

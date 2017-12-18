@@ -75,16 +75,7 @@ function addToDOM(){
      dv.appendChild(name);
 
     break1(dv);
-     	var Desc=document.createElement("label");
-		Desc.innerHTML="Description: ";
-		dv.appendChild(Desc);
-		
-     var name1=document.createElement("label");
-	  name1.setAttribute("id","dsc");
-     name1.innerHTML=flist[i].desc;
-     dv.appendChild(name1);
-
-     break1(dv);
+     
 
 		var Price=document.createElement("label");
 		Price.innerHTML="Price: ";
