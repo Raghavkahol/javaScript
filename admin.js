@@ -81,7 +81,7 @@ localStorage.adminUser = JSON.stringify(products);
 	 if(email.value&&pswrdVal.value){
 		 if(chck()==1){
 			 
-			 window.location.assign("manage-products.html");
+			 window.location.assign("adminDashboard.html");
 		 }else{
 			 alert("Not a valid Account");
 		 }

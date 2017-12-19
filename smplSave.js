@@ -6,40 +6,6 @@ var divListProducts = document.getElementById("divListProducts");
 var aAddProduct = document.getElementById("aAddProduct");
 productArray=local();
 addArry(); 
-
-
-
-//get data about user
-var ad=[];
-ad=session();
-     //load data from browser history
-function session()
-{
-if (!localStorage.adminUser)
-{
-//default to empty array
-localStorage.adminUser = JSON.stringify([]);
-}
-return JSON.parse(localStorage.adminUser);
-}
-	//log out button
- var butn113=document.createElement("button");
-	butn113.setAttribute("id","logot");
-	butn113.setAttribute("style","float:right");
-	butn113.innerHTML="Logout";
-	div3.appendChild(butn113); 
-	//logout funtionality
-	document.getElementById("logot").addEventListener("click",function(){
-		sessionStorage.currentuser = JSON.stringify([]);
-		window.location.assign("homepage.html");
-	});
-
- var name11=document.createElement("label");
-	name11.setAttribute("id","nme");
-	name11.setAttribute("style","float:right");
-	name11.innerHTML="Hi ,"+ad[0].name;
-	div3.appendChild(name11); 
-
 	
 	
 
